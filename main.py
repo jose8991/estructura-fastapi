@@ -1,5 +1,10 @@
 from fastapi import FastAPI
-from routers import introduccion
+from core.database import engine, Base, test_db_connection
+from routers import users
+
+# Crear las tablas en la base de datos
+def create_tables():
+    Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="herramientas fastapi",
@@ -11,5 +16,14 @@ app = FastAPI(
     }
 )
 
+# Probar la conexión a la base de datos al iniciar la aplicación
+test_db_connection()
 
-app.include_router(introduccion.router, tags=["Introduccion"], prefix="/introduccion")
+# Crear las tablas al iniciar la aplicación
+create_tables()
+
+# Incluir el router para las rutas de autenticación
+app.include_router(users.router, prefix="/auth", tags=["auth"])
+
+# Aquí puedes incluir otras rutas como la de introducción
+# app.include_router(introduccion.router, tags=["Introducción"], prefix="/introduccion")
