@@ -4,6 +4,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from schemas.user import UserCreate, User
 from services.users import create_user, get_user_by_email
 from auth.dependencies import get_current_user
+from auth.dependencies import has_role, has_area, has_role_or_area
 from core.database import get_db
 from core.security import verify_password, create_access_token
 
@@ -45,3 +46,25 @@ def login_for_access_token(db: Session = Depends(get_db), form_data: OAuth2Passw
 @router.get("/users/me", response_model=User)
 def read_users_me(current_user: User = Depends(get_current_user)):
     return current_user
+
+
+@router.post("/register-user", dependencies=[Depends(has_role(["root", "administrador"]))])
+def register_user(db: Session = Depends(get_db)):
+    # Lógica para registrar usuario
+    return {"message": "User registered successfully"}
+
+@router.get("/protected-rol", dependencies=[Depends(has_role(["infraestructura", "administrador"]))])
+def register_user(db: Session = Depends(get_db)):
+    # Lógica para registrar usuario
+    return {"message": "User registered successfully"}
+
+
+@router.get("/protected-area", dependencies=[Depends(has_area(["HR", "IT"]))])
+def protected_area(db: Session = Depends(get_db)):
+    # Lógica para acceder a áreas protegidas
+    return {"message": "Access granted"}
+
+@router.get("/protected-role-area", dependencies=[Depends(has_role_or_area(["admin"], ["IT"]))])
+def protected_role_area(db: Session = Depends(get_db)):
+    # Lógica para roles y áreas protegidas
+    return {"message": "Access granted for admin in IT"}
