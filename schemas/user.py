@@ -7,9 +7,9 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
-    id_area: int
-    id_rol: int
-
+    nombre_area: str
+    nombre_rol: str
+    
 class UserInDB(UserBase):
     hashed_password: str
     id_area: int
