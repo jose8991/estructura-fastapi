@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from core.database import Base
 
@@ -20,5 +20,7 @@ class Usuario(Base):
     password = Column(String(100), unique=True, index=True)
     id_area = Column(Integer, ForeignKey("areas.id_area"))
     id_rol = Column(Integer, ForeignKey("roles.id_rol"))
+    reset_password_token = Column(String(100), nullable=True)
+    reset_password_expiry = Column(DateTime, nullable=True)
     area = relationship("Area")
     rol = relationship("Rol")

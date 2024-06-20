@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from core.database import engine, Base, test_db_connection
-from routers import users
+from routers import users, password_reset
 
 # Crear las tablas en la base de datos
 def create_tables():
@@ -23,7 +23,8 @@ test_db_connection()
 create_tables()
 
 # Incluir el router para las rutas de autenticación
-app.include_router(users.router, prefix="/auth", tags=["auth"])
+app.include_router(users.router, prefix="/users", tags=["auth"])
+app.include_router(password_reset.router, tags=["Password Reset"], prefix="/auth")
 
 # Aquí puedes incluir otras rutas como la de introducción
 # app.include_router(introduccion.router, tags=["Introducción"], prefix="/introduccion")
